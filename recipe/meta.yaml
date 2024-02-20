@@ -41,7 +41,7 @@ outputs:
         - {{ compiler("cxx") }}
         - sysroot_{{ target_platform }} {{ conda_glibc_ver }}.*    # [linux]
       host:
-        - arm-variant * {{ arm_variant_type }}  # [aarch64]
+        #- arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-version {{ cuda_version }}
         - {{ pin_subpackage("cuda-crt-tools", exact=True) }}
         - {{ pin_subpackage("cuda-nvvm-tools", exact=True) }}
@@ -88,7 +88,7 @@ outputs:
       build:
         - sysroot_{{ target_platform }} {{ conda_glibc_ver }}.*    # [linux]
       host:
-        - arm-variant * {{ arm_variant_type }}  # [aarch64]
+        #- arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-version {{ cuda_version }}
         - {{ pin_subpackage("cuda-nvcc-tools", exact=True) }}
         - {{ pin_subpackage("cuda-crt-dev_" + target_platform, exact=True) }}
@@ -135,7 +135,7 @@ outputs:
       build:
         - sysroot_{{ target_platform }} {{ conda_glibc_ver }}.*    # [linux]
       host:
-        - arm-variant * {{ arm_variant_type }}  # [aarch64]
+        #- arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-version {{ cuda_version }}
         - cuda-cudart-dev
         - {{ pin_subpackage("cuda-nvvm-impl", exact=True) }}
@@ -186,7 +186,7 @@ outputs:
       - Library\bin\crt  # [win]
     requirements:
       host:
-        - arm-variant * {{ arm_variant_type }}  # [aarch64]
+        #- arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-version {{ cuda_version }}
       run:
         - {{ pin_compatible("cuda-version", max_pin="x.x") }}
@@ -218,7 +218,7 @@ outputs:
       - Library\include\crt                    # [win]
     requirements:
       host:
-        - arm-variant * {{ arm_variant_type }}  # [aarch64]
+        #- arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-version {{ cuda_version }}
       run:
         - {{ pin_compatible("cuda-version", max_pin="x.x") }}
@@ -249,7 +249,7 @@ outputs:
         - {{ compiler("c") }}
         - {{ compiler("cxx") }}
       host:
-        - arm-variant * {{ arm_variant_type }}  # [aarch64]
+        #- arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-version {{ cuda_version }}
       run:
         - {{ pin_compatible("cuda-version", max_pin="x.x") }}
@@ -278,7 +278,7 @@ outputs:
       - targets/{{ target_name }}/nvvm  # [linux]
     requirements:
       host:
-        - arm-variant * {{ arm_variant_type }}  # [aarch64]
+        #- arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-version {{ cuda_version }}
       run:
         - {{ pin_compatible("cuda-version", max_pin="x.x") }}
@@ -311,7 +311,7 @@ outputs:
         - {{ compiler("c") }}
         - {{ compiler("cxx") }}
       host:
-        - arm-variant * {{ arm_variant_type }}  # [aarch64]
+        #- arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-version {{ cuda_version }}
       run:
         - {{ pin_compatible("cuda-version", max_pin="x.x") }}
