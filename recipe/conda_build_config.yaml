@@ -22,3 +22,6 @@ zip_keys:
     - VSVER
     - RUNTIME_VERSION
     - CL_VERSION
+conda_glibc_ver:
+  - 2.17          # [not aarch64]
+  - 2.26          # [aarch64]
