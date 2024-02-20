@@ -162,8 +162,8 @@ outputs:
         - {{ compiler("c") }}
         - {{ compiler("cxx") }}
         - {{ stdlib("c") }}
-        - gxx              # [linux]
-        - gcc              # [linux]
+        #- gxx              # [linux]
+        #- gcc              # [linux]
         - vs{{ VSYEAR }}_win-64 =={{ CL_VERSION }}  # [win]
         - cmake
         - cuda-driver-dev  # [linux]
@@ -175,6 +175,14 @@ outputs:
         - run_nvcc_tests.sh   # [linux]
         - run_nvcc_tests.bat  # [win]
       commands:
+        # these symlinks are provided by the gxx and gcc packages on conda-forge
+        - ln -sf ${PREFIX}/bin/x86_64-conda-linux-gnu-g++ ${PREFIX}/bin/g++     # [linux and x86_64]
+        - ln -sf ${PREFIX}/bin/x86_64-conda-linux-gnu-gcc ${PREFIX}/bin/gcc     # [linux and x86_64]
+        - ln -sf ${PREFIX}/bin/aarch64-conda-linux-gnu-g++ ${PREFIX}/bin/g++     # [linux and aarch64]
+        - ln -sf ${PREFIX}/bin/aarch64-conda-linux-gnu-gcc ${PREFIX}/bin/gcc     # [linux and aarch64]
+        # cmake has trouble finding ar on linux-aarch64; so this needs to be added
+        # compared to conda-forge. NB conda-forge isn't building this for linux-aarch64 currently.
+        - if [ ! -f "${PREFIX}/bin/ar" ]; then ln -s "${AR}" "${PREFIX}/bin/ar"; fi # [linux and aarch64]
         - test -L $PREFIX/lib/libnvptxcompiler_static.a  # [linux]
         - {{ exists }} nvcc
         - ./run_nvcc_tests.sh   # [linux]
