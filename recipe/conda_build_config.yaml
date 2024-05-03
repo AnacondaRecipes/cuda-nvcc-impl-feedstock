@@ -1,7 +1,7 @@
-c_compiler_version:        # [linux]
-  - 12                     # [linux]
-cxx_compiler_version:      # [linux]
-  - 12                     # [linux]
+# c_compiler_version:        # [linux]
+#   - 12                     # [linux]
+# cxx_compiler_version:      # [linux]
+#   - 12                     # [linux]
 arm_variant_type:  # [aarch64]
   - sbsa           # [aarch64]
 VCVER:
@@ -13,7 +13,7 @@ VSVER:
 RUNTIME_VERSION:
   - 14.29.30139
 CL_VERSION:
-  - 19.29.30139
+  - 19.27.29111
   
 zip_keys:
   -
@@ -22,3 +22,6 @@ zip_keys:
     - VSVER
     - RUNTIME_VERSION
     - CL_VERSION
+conda_glibc_ver:
+  - 2.17          # [not aarch64]
+  - 2.26          # [aarch64]
