@@ -2,3 +2,7 @@
 # which is not what we want
 noarch_upload:
   - all
+
+upload_without_merge: True
+upload_to_staging_channel_in_pr: False
+channels: [cuda12_def]
