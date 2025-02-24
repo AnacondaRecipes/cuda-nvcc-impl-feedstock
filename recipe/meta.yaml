@@ -43,7 +43,7 @@ outputs:
       build:
         - {{ compiler("c") }}
         - {{ compiler("cxx") }}
-        - {{ stdlib("c") }}
+        #- {{ stdlib("c") }}
       host:
         #- arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-version {{ cuda_version }}
@@ -96,7 +96,7 @@ outputs:
       - Library\lib\nvptxcompiler_static.lib  # [win]
     requirements:
       build:
-        - {{ stdlib("c") }}
+        #- {{ stdlib("c") }}
       host:
         #- arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-version {{ cuda_version }}
@@ -161,7 +161,7 @@ outputs:
       requires:
         - {{ compiler("c") }}
         - {{ compiler("cxx") }}
-        - {{ stdlib("c") }}
+        #- {{ stdlib("c") }}
         #- gxx              # [linux]
         #- gcc              # [linux]
         - vs{{ VSYEAR }}_win-64 =={{ CL_VERSION }}  # [win]
@@ -265,7 +265,7 @@ outputs:
       build:
         - {{ compiler("c") }}
         - {{ compiler("cxx") }}
-        - {{ stdlib("c") }}
+        #- {{ stdlib("c") }}
       host:
         #- arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-version {{ cuda_version }}
@@ -333,7 +333,7 @@ outputs:
       build:
         - {{ compiler("c") }}
         - {{ compiler("cxx") }}
-        - {{ stdlib("c") }}
+        #- {{ stdlib("c") }}
       host:
         #- arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-version {{ cuda_version }}
