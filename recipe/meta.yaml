@@ -21,7 +21,7 @@
 {% set sha256 = "145f8779bd56bdfa214447e5cb1b3a206ec1b7398da460e257f2898fd8604c54" %}  # [linux64]
 {% set sha256 = "03f998e7d6c820479b18397276ac9067f4f757b0f94daec64454fdda373eb272" %}  # [aarch64 and arm_variant_type == "sbsa"]
 {% set sha256 = "d0158c4dd6565c0c9bca50d2e0bd5fd944d40333725a1c6875ef1840b719abfc" %}  # [win]
-{% set sha256 = "2432ef8a7c12d0a9ce3332a8af42b123c07f256390b3390802b1b2c6254c6c74" %}  # [aarch64 and arm_variant_type == "tegra"]
+{% set sha256 = "a02498cc0a4d3571587ac249185f6bdf3095dbead75cc3c3b2f11443c67b0255" %}  # [aarch64 and arm_variant_type == "tegra"]
 
 package:
   name: cuda-nvcc-impl-split
