@@ -1,5 +1,3 @@
-{% set gcc_constraint = ">=6,<15.0a0" %}
-{% set gcc_min_constraint = ">=6" %}
 {% set name = "cuda-nvcc-impl" %}
 {% set version = "12.8.61" %}
 {% set cuda_version = "12.8" %}
@@ -118,14 +116,14 @@ outputs:
         - {{ pin_subpackage("libnvptxcompiler-dev_" + target_platform, exact=True) }}
         - arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-version {{ cuda_version }}
-        - libgcc {{ gcc_min_constraint }}  # [linux]
+        - libgcc-ng {{ gcc_min_constraint }}  # [linux]
       run:
         - {{ pin_compatible("cuda-version", max_pin="x.x") }}
         - {{ pin_subpackage("cuda-crt-dev_" + target_platform, exact=True) }}
         - {{ pin_subpackage("cuda-nvvm-dev_" + target_platform, exact=True) }}
         - {{ pin_subpackage("libnvptxcompiler-dev_" + target_platform, exact=True) }}
         - arm-variant * {{ arm_variant_type }}    # [aarch64]
-        - libgcc {{ gcc_min_constraint }}  # [linux]
+        - libgcc-ng {{ gcc_min_constraint }}  # [linux]
       run_constrained:
         - gcc_impl_{{ target_platform }} {{ gcc_constraint }}  # [linux]
     test:
