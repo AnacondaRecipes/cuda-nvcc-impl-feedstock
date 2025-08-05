@@ -20,9 +20,9 @@
 {% set extension = "zip" %}  # [win]
 {% set exists = "which" %}  # [not win]
 {% set exists = "where" %}  # [win]
-{% set sha256 = "7a1a5b652e5ef85c82b721d10672fc9a2dbaab44e9bd3c65a69517bf53998c35" %}  # [linux64]
+{% set sha256 = "145f8779bd56bdfa214447e5cb1b3a206ec1b7398da460e257f2898fd8604c54" %}  # [linux64]
 {% set sha256 = "0aa1fce92dbae76c059c27eefb9d0ffb58e1291151e44ff7c7f1fc2dd9376c0d" %}  # [aarch64 and arm_variant_type == "sbsa"]
-{% set sha256 = "227b109663b5e57d2718bcabb24a4ba0d9d4e52d958e327dc476f7c28691be85" %}  # [win]
+{% set sha256 = "d0158c4dd6565c0c9bca50d2e0bd5fd944d40333725a1c6875ef1840b719abfc" %}  # [win]
 {% set sha256 = "2432ef8a7c12d0a9ce3332a8af42b123c07f256390b3390802b1b2c6254c6c74" %}  # [aarch64 and arm_variant_type == "tegra"]
 
 package:
