@@ -28,19 +28,8 @@ for i in `ls`; do
             for j in `ls "${i}"`; do
                 [[ -f "bin/${j}" ]] || continue
 
-                # Check if this file should be excluded from patchelf processing
-                should_skip=false
-                while IFS= read -r exclude_pattern; do
-                    # Skip empty lines and comments
-                    [[ -z "$exclude_pattern" || "$exclude_pattern" =~ ^[[:space:]]*# ]] && continue
-                    if [[ "$j" == $exclude_pattern ]]; then
-                        should_skip=true
-                        break
-                    fi
-                done < ${RECIPE_DIR}/patchelf_exclude.txt
-                
-                if [[ "$should_skip" == "true" ]]; then
-                    echo "Skipping bin/${j} as it matches an exclusion pattern."
+                if grep -qx "${j}" ${RECIPE_DIR}/patchelf_exclude.txt; then
+                    echo "Skipping bin/${j} as it is in the patchelf exclusion list."
                     continue
                 fi
 
@@ -67,23 +56,6 @@ for i in `ls`; do
                     echo patchelf --force-rpath --set-rpath "\$ORIGIN/../lib64:\$ORIGIN/../../lib:\$ORIGIN/../../${targetsDir}/lib" "${j}" ...
                     patchelf --force-rpath --set-rpath "\$ORIGIN/../lib64:\$ORIGIN/../../lib:\$ORIGIN/../../${targetsDir}/lib" "${j}"
                 elif [[ "${j}" =~ /lib.*/.*\.so($|\.) && ! -L "${j}" ]]; then
-                    # Check if this file should be excluded from patchelf processing
-                    should_skip=false
-                    while IFS= read -r exclude_pattern; do
-                        # Skip empty lines and comments
-                        [[ -z "$exclude_pattern" || "$exclude_pattern" =~ ^[[:space:]]*# ]] && continue
-                        # Use basename for pattern matching
-                        filename=$(basename "$j")
-                        if [[ "$filename" == $exclude_pattern ]]; then
-                            should_skip=true
-                            break
-                        fi
-                    done < ${RECIPE_DIR}/patchelf_exclude.txt
-                    
-                    if [[ "$should_skip" == "true" ]]; then
-                        echo "Skipping ${j} as it matches an exclusion pattern."
-                        continue
-                    fi
                     echo patchelf --force-rpath --set-rpath "\$ORIGIN" "${j}" ...
                     patchelf --force-rpath --set-rpath "\$ORIGIN" "${j}"
                 fi
@@ -91,7 +63,6 @@ for i in `ls`; do
 
             cp -rv $i ${PREFIX}
             ln -sv ${PREFIX}/nvvm ${PREFIX}/${targetsDir}/nvvm
-
         fi
     else
         cp -rv $i ${PREFIX}/${targetsDir}
