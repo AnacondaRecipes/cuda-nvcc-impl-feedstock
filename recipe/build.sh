@@ -56,6 +56,10 @@ for i in `ls`; do
                     echo patchelf --force-rpath --set-rpath "\$ORIGIN/../lib64:\$ORIGIN/../../lib:\$ORIGIN/../../${targetsDir}/lib" "${j}" ...
                     patchelf --force-rpath --set-rpath "\$ORIGIN/../lib64:\$ORIGIN/../../lib:\$ORIGIN/../../${targetsDir}/lib" "${j}"
                 elif [[ "${j}" =~ /lib.*/.*\.so($|\.) && ! -L "${j}" ]]; then
+                    if grep -qx "${j}" ${RECIPE_DIR}/patchelf_exclude.txt; then
+                        echo "Skipping ${j} as it is in the patchelf exclusion list."
+                        continue
+                    fi
                     echo patchelf --force-rpath --set-rpath "\$ORIGIN" "${j}" ...
                     patchelf --force-rpath --set-rpath "\$ORIGIN" "${j}"
                 fi

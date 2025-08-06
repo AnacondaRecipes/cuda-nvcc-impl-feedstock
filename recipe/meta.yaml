@@ -386,9 +386,6 @@ outputs:
     build:
       # libnvvm.so gets corrupted by patchelf. No need to relocate as it is already relocatable.
       binary_relocation: false
-      # Work around LIEF ARM64 issue by excluding problematic files from binary relocation
-      missing_dso_whitelist:   # [linux-aarch64]
-        - "*/libnvvm.so*"      # [linux-aarch64]
     files:
       - nvvm/include          # [linux]
       - nvvm/lib64            # [linux]
