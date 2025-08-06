@@ -27,6 +27,6 @@ zip_keys:
     - VCVER                # [win]
     - VSYEAR               # [win]
     - CL_VERSION           # [win]
-  -                     # [linux and aarch64]
-    - arm_variant_type  # [linux and aarch64]
+  # -                     # [linux and aarch64]
+  #   - arm_variant_type  # [linux and aarch64]
     # - c_stdlib_version  # [linux and aarch64]
