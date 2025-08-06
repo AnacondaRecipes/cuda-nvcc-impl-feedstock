@@ -37,7 +37,7 @@ source:
 build:
   number: 2
   binary_relocation: false
-  skip: true  # [osx or ppc64le]
+  skip: true  # [osx]
 
 requirements:
   build:
@@ -385,7 +385,7 @@ outputs:
   - name: cuda-nvvm-impl
     build:
       # libnvvm.so gets corrupted by patchelf. No need to relocate as it is already relocatable.
-      binary_relocation: false
+      #binary_relocation: false
     files:
       - nvvm/include          # [linux]
       - nvvm/lib64            # [linux]
