@@ -5,3 +5,7 @@ upload_without_merge: True
 # which is not what we want
 noarch_upload:
   - all
+# Required for glibc >= 2.28
+pkg_build_image_tag: main-rockylinux-8
+build_env_vars:
+  ANACONDA_ROCKET_GLIBC: "2.28"
