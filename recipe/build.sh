@@ -63,6 +63,12 @@ for i in `ls`; do
 
             cp -rv $i ${PREFIX}
             ln -sv ${PREFIX}/nvvm ${PREFIX}/${targetsDir}/nvvm
+
+            # Work around LIEF ARM64 issue
+            if [[ ${target_platform} == "linux-aarch64" ]]; then
+                echo "Working around LIEF ARM64 issue..."
+                find ${PREFIX}/nvvm/lib64 -name "libnvvm.so*" -type f -exec chmod 644 {} \;
+            fi
         fi
     else
         cp -rv $i ${PREFIX}/${targetsDir}

@@ -385,7 +385,7 @@ outputs:
   - name: cuda-nvvm-impl
     build:
       # libnvvm.so gets corrupted by patchelf. No need to relocate as it is already relocatable.
-      binary_relocation: true
+      binary_relocation: false
     files:
       - nvvm/include          # [linux]
       - nvvm/lib64            # [linux]
@@ -395,6 +395,7 @@ outputs:
       build:
         - {{ compiler("c") }}
         - {{ stdlib("c") }}
+        - py-lief <0.16
       host:
         - cuda-version {{ cuda_version }}
       run:
