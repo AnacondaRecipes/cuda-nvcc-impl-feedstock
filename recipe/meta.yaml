@@ -385,7 +385,7 @@ outputs:
   - name: cuda-nvvm-impl
     build:
       # libnvvm.so gets corrupted by patchelf. No need to relocate as it is already relocatable.
-      #binary_relocation: false
+      binary_relocation: true
     files:
       - nvvm/include          # [linux]
       - nvvm/lib64            # [linux]
