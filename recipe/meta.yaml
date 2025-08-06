@@ -390,6 +390,13 @@ outputs:
       # This is a workaround to ignore the overlinking error for problematic libnvvm.so files.
       overlinking_ignore_patterns: # [linux-aarch64]
         - "nvvm/lib64/libnvvm.so*"  # [linux-aarch64]
+        - "nvvm/lib64/libnvvm.so"   # [linux-aarch64]
+        - "nvvm/lib64/libnvvm.so.4" # [linux-aarch64]
+        - "nvvm/lib64/libnvvm.so.4.0.0" # [linux-aarch64]
+        - "libnvvm.so*"             # [linux-aarch64]
+        - "libnvvm.so"              # [linux-aarch64]
+        - "libnvvm.so.4"            # [linux-aarch64]
+        - "libnvvm.so.4.0.0"        # [linux-aarch64]
     files:
       - nvvm/include          # [linux]
       - nvvm/lib64            # [linux]
