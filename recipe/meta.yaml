@@ -79,7 +79,8 @@ outputs:
       commands:
         - test -f $PREFIX/bin/nvcc                                # [linux]
         - test -f $PREFIX/bin/ptxas                               # [linux]
-        - bash test-rpath-nvcc.sh                                 # [linux]
+        - chmod +x test-rpath-nvcc.sh                             # [linux]
+        - ./test-rpath-nvcc.sh                                    # [linux]
     about:
       home: https://developer.nvidia.com/cuda-toolkit
       license_file: LICENSE
@@ -253,6 +254,7 @@ outputs:
         - test -f $PREFIX/targets/{{ target_name }}/lib/libnvptxcompiler_static.a     # [linux]
         - test -f $PREFIX/targets/{{ target_name }}/include/nvPTXCompiler.h           # [linux]
         - {{ exists }} nvcc
+        - chmod +x run_nvcc_tests.sh  # [linux]
         - ./run_nvcc_tests.sh   # [linux]
         - .\run_nvcc_tests.bat  # [win]
     about:
@@ -412,7 +414,8 @@ outputs:
       commands:
         - test -d $PREFIX/nvvm/include  # [linux]
         - test -d $PREFIX/nvvm/lib64    # [linux]
-        - bash test-rpath-nvvm.sh       # [linux]
+        - chmod +x test-rpath-nvvm.sh   # [linux]
+        - ./test-rpath-nvvm.sh          # [linux]
         - if not exist %LIBRARY_PREFIX%\nvvm\include exit 1  # [win]
         - if not exist %LIBRARY_PREFIX%\nvvm\lib exit 1      # [win]
     about:
