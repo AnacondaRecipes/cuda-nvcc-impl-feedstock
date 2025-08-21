@@ -207,6 +207,8 @@ outputs:
       strong:
         - cuda-version >={{ cuda_version }},<{{ cuda_version_next_major }}
     requirements:
+      build:
+        - {{ stdlib("c") }}
       host:
         - {{ pin_subpackage("cuda-nvvm-impl", exact=True) }}
         - arm-variant * {{ arm_variant_type }}  # [aarch64]
@@ -222,7 +224,6 @@ outputs:
         - cuda-cudart-dev
       run_constrained:
         - gcc_impl_{{ target_platform }} {{ gcc_constraint }}  # [linux]
-        - vc >={{ VCVER }}                      # [win]
     test:
       requires:
         - {{ compiler("c") }}
@@ -230,7 +231,6 @@ outputs:
         - {{ stdlib("c") }}
         # - gxx              # [linux]
         # - gcc              # [linux]
-        - vs{{ VSYEAR }}_win-64 =={{ CL_VERSION }}  # [win]
         - cmake
         - cuda-driver-dev  # [linux]
         - git              # [linux]
@@ -270,6 +270,8 @@ outputs:
       - bin/crt          # [linux]
       - Library\bin\crt  # [win]
     requirements:
+      build:
+        - {{ stdlib("c") }}
       host:
         - cuda-version {{ cuda_version }}
       run:
@@ -343,7 +345,7 @@ outputs:
       commands:
         - test -d $PREFIX/nvvm                                    # [linux]
         - test -f $PREFIX/nvvm/bin/cicc                           # [linux]
-        - bash test-rpath-nvvm.sh                                 # [linux]
+        - ./test-rpath-nvvm.sh                                    # [linux]
         - if not exist %LIBRARY_PREFIX%\nvvm\bin\cicc.exe exit 1  # [win]
         - if not exist %LIBRARY_PREFIX%\nvvm\libdevice exit 1     # [win]
     about:
