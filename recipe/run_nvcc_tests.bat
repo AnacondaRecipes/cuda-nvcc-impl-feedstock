@@ -8,3 +8,7 @@ if errorlevel 1 exit 1
 
 cmake -S . -B ./build -G=Ninja && cmake --build ./build -v
 if errorlevel 1 exit 1
+
+cd build
+ctest --output-on-failure
+if errorlevel 1 exit 1
