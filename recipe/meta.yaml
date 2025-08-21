@@ -18,10 +18,6 @@
 {% set extension = "zip" %}  # [win]
 {% set exists = "which" %}  # [not win]
 {% set exists = "where" %}  # [win]
-{% set sha256 = "9961b3484b6b71314063709a4f9529654f96782ad39e72bf1e00f070db8210d3" %}  # [linux64]
-{% set sha256 = "dc0b713ce69fd921aa53ac68610717d126fc273a3c554b0465cf44d7e379f467" %}  # [aarch64 and arm_variant_type == "sbsa"]
-{% set sha256 = "9fdc70b4271ed9aad4d64cd7076a7d96ec36512d074b9995fe638de669197391" %}  # [win]
-#{% set sha256 = "2eb267e6ebbe17e5ebc593bae8b83fa927c3e53cbf43ef5c614eff6c94053d10" %}  # [aarch64 and arm_variant_type == "tegra"]
 
 package:
   name: cuda-nvcc-impl-split
@@ -29,7 +25,9 @@ package:
 
 source:
   url: https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvcc/{{ platform }}/cuda_nvcc-{{ platform }}-{{ version }}-archive.{{ extension }}
-  sha256: {{ sha256 }}
+  sha256: 9961b3484b6b71314063709a4f9529654f96782ad39e72bf1e00f070db8210d3  # [linux64]
+  sha256: dc0b713ce69fd921aa53ac68610717d126fc273a3c554b0465cf44d7e379f467  # [aarch64 and arm_variant_type == "sbsa"]
+  sha256: 9fdc70b4271ed9aad4d64cd7076a7d96ec36512d074b9995fe638de669197391  # [win]
   patches:
     - nvcc.profile.patch      # [linux]
     - nvcc.profile.patch.win  # [win]
