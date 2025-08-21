@@ -230,8 +230,6 @@ outputs:
         - {{ compiler("c") }}
         - {{ compiler("cxx") }}
         - {{ stdlib("c") }}
-        # - gxx              # [linux]
-        # - gcc              # [linux]
         - cmake
         - cuda-driver-dev  # [linux]
         - git              # [linux]
