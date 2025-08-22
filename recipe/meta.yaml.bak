@@ -156,7 +156,7 @@ outputs:
   - name: cuda-nvcc-impl
     build:
       # libnvvm.so gets corrupted by patchelf. No need to relocate as it is already relocatable
-    binary_relocation: false
+      binary_relocation: false
     run_exports:
       strong:
         - cuda-version >={{ cuda_version }},<{{ cuda_version_next_major }}
@@ -328,7 +328,7 @@ outputs:
   - name: cuda-nvvm-impl
     build:
       # libnvvm.so gets corrupted by patchelf. No need to relocate as it is already relocatable.
-    binary_relocation: false
+      binary_relocation: false
     files:
       - nvvm/include          # [linux]
       - nvvm/lib64            # [linux]
