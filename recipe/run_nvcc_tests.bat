@@ -43,3 +43,4 @@ REM   UnityBuild - Windows path length limitations (250 character limit)
 REM   RuntimeControls - Windows command parsing issues with complex paths
 ctest -L CUDA --output-on-failure -E "(Architecture|CompileFlags|DeviceLTO|ProperDeviceLibraries|SharedRuntime|ObjectLibrary|WithC|StubRPATH|ArchSpecial|GPUDebugFlag|SeparateCompilationPTX|WithDefs|CUBIN|Fatbin|OptixIR|CUDA_architectures|Toolkit|Cuda.Complex|CompileFeatures|NinjaMultiConfig|UnityBuild|RuntimeControls)"
 if errorlevel 1 exit 1
+
