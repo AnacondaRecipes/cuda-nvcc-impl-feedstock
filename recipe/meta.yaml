@@ -39,7 +39,7 @@ build:
 
 requirements:
   build:
-    - patchelf  # [linux]
+    - patchelf             # [linux]
     - cf-nvidia-tools 1.*  # [linux]
 
 outputs:
