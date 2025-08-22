@@ -170,6 +170,8 @@ outputs:
         - {{ compiler("c") }}
         - {{ compiler("cxx") }}
         - {{ stdlib("c") }}
+        # Use libgcc-ng instead of libgcc
+        - libgcc-ng {{ gcc_min_constraint }}  # [linux]
         - cmake
         - cuda-driver-dev  # [linux]
         - git              # [linux]
