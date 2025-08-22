@@ -1,5 +1,3 @@
-{% set gcc_constraint = ">=6,<15.0a0" %}
-{% set gcc_min_constraint = ">=6" %}
 {% set name = "cuda-nvcc-impl" %}
 {% set version = "12.8.93" %}
 {% set cuda_version = "12.8" %}
@@ -7,14 +5,12 @@
 {% set gcc_min_constraint = ">=6" %}
 {% set gcc_constraint = ">=6,<15.0a0" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
-{% set platform = "linux-ppc64le" %}  # [ppc64le]
 {% set platform = "linux-sbsa" %}  # [aarch64 and arm_variant_type == "sbsa"]
-{% set platform = "linux-aarch64" %}  # [aarch64 and arm_variant_type == "tegra"]
+#{% set platform = "linux-aarch64" %}  # [aarch64 and arm_variant_type == "tegra"]
 {% set platform = "windows-x86_64" %}  # [win]
 {% set target_name = "x86_64-linux" %}  # [linux64]
-{% set target_name = "ppc64le-linux" %}  # [ppc64le]
 {% set target_name = "sbsa-linux" %}  # [aarch64 and arm_variant_type == "sbsa"]
-{% set target_name = "aarch64-linux" %}  # [aarch64 and arm_variant_type == "tegra"]
+#{% set target_name = "aarch64-linux" %}  # [aarch64 and arm_variant_type == "tegra"]
 {% set target_name = "x64" %}  # [win]
 {% set extension = "tar.xz" %}  # [not win]
 {% set extension = "zip" %}  # [win]
@@ -23,7 +19,7 @@
 {% set sha256 = "9961b3484b6b71314063709a4f9529654f96782ad39e72bf1e00f070db8210d3" %}  # [linux64]
 {% set sha256 = "dc0b713ce69fd921aa53ac68610717d126fc273a3c554b0465cf44d7e379f467" %}  # [aarch64 and arm_variant_type == "sbsa"]
 {% set sha256 = "9fdc70b4271ed9aad4d64cd7076a7d96ec36512d074b9995fe638de669197391" %}  # [win]
-{% set sha256 = "2eb267e6ebbe17e5ebc593bae8b83fa927c3e53cbf43ef5c614eff6c94053d10" %}  # [aarch64 and arm_variant_type == "tegra"]
+#{% set sha256 = "2eb267e6ebbe17e5ebc593bae8b83fa927c3e53cbf43ef5c614eff6c94053d10" %}  # [aarch64 and arm_variant_type == "tegra"]
 
 package:
   name: cuda-nvcc-impl-split
@@ -39,7 +35,7 @@ source:
 build:
   number: 3
   binary_relocation: false
-  skip: true  # [osx or ppc64le]
+  skip: true  # [osx]
 
 requirements:
   build:
@@ -48,16 +44,6 @@ requirements:
 
 outputs:
   - name: cuda-nvcc-tools
-    build:
-      runpath_whitelist:
-        - $ORIGIN
-      # Repacked binaries on linux aarch64 have flag DT_TLSDESC (GNU_HASH),
-      # which is not supported by LIEF and can raise ValueError during
-      # overlinking checks. Use specific patterns from files section.
-      overlinking_ignore_patterns:  # [linux and aarch64]
-        - "targets/sbsa-linux/lib/{{ name }}*.so*"  # [linux and aarch64]
-        - "targets/sbsa-linux/lib/stubs/{{ name }}*.so*"  # [linux and aarch64]
-        - "lib/{{ name }}*.so*"  # [linux and aarch64]
     files:   # [linux]
       - bin/*                               # [linux]
     requirements:
@@ -100,7 +86,7 @@ outputs:
   - name: cuda-nvcc-dev_{{ target_platform }}
     build:
       noarch: generic
-      missing_dso_whitelist:   # [win]
+      missing_dso_whitelist:                     # [win]
         - "*/api-ms-win-core-winrt-*.dll"        # [win]
     run_exports:
       strong:
@@ -124,13 +110,15 @@ outputs:
         - {{ pin_subpackage("cuda-nvvm-dev_" + target_platform, exact=True) }}
         - arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-version {{ cuda_version }}
-        - libgcc {{ gcc_min_constraint }}  # [linux]
+        # Use libgcc-ng instead of libgcc
+        - libgcc-ng {{ gcc_min_constraint }}  # [linux]
       run:
         - {{ pin_compatible("cuda-version", max_pin="x.x") }}
         - {{ pin_subpackage("cuda-crt-dev_" + target_platform, exact=True) }}
         - {{ pin_subpackage("cuda-nvvm-dev_" + target_platform, exact=True) }}
         - arm-variant * {{ arm_variant_type }}    # [aarch64]
-        - libgcc {{ gcc_min_constraint }}  # [linux]
+        # Use libgcc-ng instead of libgcc
+        - libgcc-ng {{ gcc_min_constraint }}  # [linux]
       run_constrained:
         - gcc_impl_{{ target_platform }} {{ gcc_constraint }}  # [linux]
     test:
@@ -156,7 +144,7 @@ outputs:
   - name: cuda-nvcc-impl
     build:
       # libnvvm.so gets corrupted by patchelf. No need to relocate as it is already relocatable
-    binary_relocation: false
+      binary_relocation: false
     run_exports:
       strong:
         - cuda-version >={{ cuda_version }},<{{ cuda_version_next_major }}
@@ -177,15 +165,11 @@ outputs:
         - cuda-cudart-dev
       run_constrained:
         - gcc_impl_{{ target_platform }} {{ gcc_constraint }}  # [linux]
-        - vc >={{ VCVER }}                      # [win]
     test:
       requires:
         - {{ compiler("c") }}
         - {{ compiler("cxx") }}
         - {{ stdlib("c") }}
-        - gxx              # [linux]
-        - gcc              # [linux]
-        - vs{{ VSYEAR }}_win-64 =={{ CL_VERSION }}  # [win]
         - cmake
         - cuda-driver-dev  # [linux]
         - git              # [linux]
@@ -304,7 +288,7 @@ outputs:
   - name: cuda-nvvm-dev_{{ target_platform }}
     build:
       noarch: generic
-    files:   # [linux]
+    files:                              # [linux]
       - targets/{{ target_name }}/nvvm  # [linux]
     requirements:
       host:
@@ -328,7 +312,11 @@ outputs:
   - name: cuda-nvvm-impl
     build:
       # libnvvm.so gets corrupted by patchelf. No need to relocate as it is already relocatable.
-    binary_relocation: false
+      binary_relocation: false
+      # Repacked binaries on linux aarch64 have flag DT_TLSDESC set (GNU_HASH), which is not supported by lief.
+      # This is a workaround to ignore the overlinking error for problematic libnvvm.so files.
+      overlinking_ignore_patterns: # [linux and aarch64]
+        - "nvvm/lib64/libnvvm.so*"  # [linux and aarch64]
     files:
       - nvvm/include          # [linux]
       - nvvm/lib64            # [linux]
