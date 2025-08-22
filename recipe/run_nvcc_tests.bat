@@ -22,5 +22,24 @@ if errorlevel 1 exit 1
 
 REM Change to the CMake test build directory and run CUDA tests
 cd cmake-tests\build
-ctest -L CUDA --output-on-failure -E "(Architecture|CompileFlags|DeviceLTO|ProperDeviceLibraries|SharedRuntime|ObjectLibrary|WithC|StubRPATH|ArchSpecial|GPUDebugFlag|SeparateCompilationPTX|WithDefs|CUBIN|Fatbin|OptixIR|CUDA_architectures|Toolkit|Cuda.Complex)"
+
+REM Test exclusion list:
+REM Requires CUDA libraries not available in build environment
+REM   ProperDeviceLibraries (needs cublas)
+REM   *SharedRuntime* (needs curand)
+REM
+REM Requires execution on a machine with a CUDA GPU
+REM   ObjectLibrary, WithC, StubRPATH, ArchSpecial, GPUDebugFlag
+REM   SeparateCompilationPTX, WithDefs, CUBIN, Fatbin, OptixIR
+REM   CUDA_architectures, *Toolkit*
+REM
+REM Failing due to glibc symbol issues
+REM   Cuda.Complex
+REM
+REM Windows-specific issues (path length, resource compiler, command parsing)
+REM   CompileFeatures - Windows environment compatibility issues
+REM   NinjaMultiConfig - Windows resource compiler and manifest file issues
+REM   UnityBuild - Windows path length limitations (250 character limit)
+REM   RuntimeControls - Windows command parsing issues with complex paths
+ctest -L CUDA --output-on-failure -E "(Architecture|CompileFlags|DeviceLTO|ProperDeviceLibraries|SharedRuntime|ObjectLibrary|WithC|StubRPATH|ArchSpecial|GPUDebugFlag|SeparateCompilationPTX|WithDefs|CUBIN|Fatbin|OptixIR|CUDA_architectures|Toolkit|Cuda.Complex|CompileFeatures|NinjaMultiConfig|UnityBuild|RuntimeControls)"
 if errorlevel 1 exit 1
