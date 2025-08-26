@@ -8,10 +8,6 @@ VCVER:
   - 14.2
 VSYEAR:
   - 2019
-VSVER:
-  - 16
-RUNTIME_VERSION:
-  - 14.29.30139
 CL_VERSION:
   - 19.27.29111
   
@@ -19,8 +15,6 @@ zip_keys:
   -
     - VCVER
     - VSYEAR
-    - VSVER
-    - RUNTIME_VERSION
     - CL_VERSION
 conda_glibc_ver:
   - 2.17          # [not aarch64]
