@@ -321,10 +321,6 @@ outputs:
     build:
       # libnvvm.so gets corrupted by patchelf. No need to relocate as it is already relocatable.
       binary_relocation: false
-      # Repacked binaries on linux aarch64 have flag DT_TLSDESC set (GNU_HASH), which is not supported by lief.
-      # This is a workaround to ignore the overlinking error for problematic libnvvm.so files.
-      overlinking_ignore_patterns: # [linux and aarch64]
-        - "nvvm/lib64/libnvvm.so*"  # [linux and aarch64]
     files:
       - nvvm/include          # [linux]
       - nvvm/lib64            # [linux]
