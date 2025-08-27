@@ -321,8 +321,15 @@ outputs:
     build:
       # libnvvm.so gets corrupted by patchelf. No need to relocate as it is already relocatable.
       binary_relocation: false
-      # Repacked binaries on linux aarch64 have flag DT_TLSDESC set (GNU_HASH), which is not supported by lief.
-      # This is a workaround to ignore the overlinking error for problematic libnvvm.so files.
+      # This is a workaround to ignore the overlinking error for problematic *.so files.
+      # The reason is that in the Amazon Linux 2-based Docker container, there's py-lief version 0.12.3. 
+      # In the Rocky 8 container, there's 0.16.4, which seems to have this bug. 
+      # See also:
+      # https://github.com/anaconda/docker-images/blob/main/anaconda-pkg-build/linux/rocky8/Dockerfile
+      # https://github.com/conda/conda-build/issues/5665
+      # https://github.com/conda-forge/conda-build-feedstock/pull/251
+      # https://github.com/conda-forge/lief-feedstock/pull/57#issuecomment-2770881269
+      # This workaround should be removed when the conda-build fix is merged/py-lief pinned and the rocky 8 docker image rebuilt.
       overlinking_ignore_patterns: # [linux and aarch64]
         - "nvvm/lib64/libnvvm.so*"  # [linux and aarch64]
     files:
