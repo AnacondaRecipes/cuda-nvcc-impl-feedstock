@@ -46,6 +46,8 @@ outputs:
   - name: cuda-nvcc-tools
     files:   # [linux]
       - bin/*                               # [linux]
+    build:
+      binary_relocation: false
     requirements:
       build:
         - {{ compiler("c") }}
