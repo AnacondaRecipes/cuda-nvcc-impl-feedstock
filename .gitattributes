@@ -3,6 +3,7 @@
 *.patch binary
 *.patch.win text eol=crlf
 *.diff binary
+*.patch.win binary
 meta.yaml text eol=lf
 build.sh text eol=lf
 bld.bat text eol=crlf
