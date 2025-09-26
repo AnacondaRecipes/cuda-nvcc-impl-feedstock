@@ -1,0 +1,4 @@
+link.stub
+prelink.stub
+nvcc.profile
+patchelf

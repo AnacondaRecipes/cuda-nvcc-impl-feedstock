@@ -78,14 +78,7 @@ Current build status
 ====================
 
 
-<table><tr>
-    <td>Travis</td>
-    <td>
-      <a href="https://app.travis-ci.com/conda-forge/cuda-nvcc-impl-feedstock">
-        <img alt="linux" src="https://img.shields.io/travis/com/conda-forge/cuda-nvcc-impl-feedstock/main.svg?label=Linux">
-      </a>
-    </td>
-  </tr>
+<table>
     
   <tr>
     <td>Azure</td>
@@ -106,17 +99,17 @@ Current build status
                 </a>
               </td>
             </tr><tr>
-              <td>linux_aarch64</td>
+              <td>linux_aarch64_arm_variant_typesbsa</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=19442&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/cuda-nvcc-impl-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/cuda-nvcc-impl-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_arm_variant_typesbsa" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>linux_ppc64le</td>
+              <td>linux_aarch64_arm_variant_typetegra</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=19442&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/cuda-nvcc-impl-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_ppc64le_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/cuda-nvcc-impl-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_arm_variant_typetegra" alt="variant">
                 </a>
               </td>
             </tr><tr>
@@ -262,5 +255,5 @@ In order to produce a uniquely identifiable distribution:
 Feedstock Maintainers
 =====================
 
-* [@conda-forge/cuda](https://github.com/conda-forge/cuda/)
+* [@conda-forge/cuda](https://github.com/orgs/conda-forge/teams/cuda/)
 

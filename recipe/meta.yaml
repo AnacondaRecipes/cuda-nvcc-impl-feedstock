@@ -1,17 +1,25 @@
 {% set name = "cuda-nvcc-impl" %}
-{% set version = "12.4.131" %}
-{% set cuda_version = "12.4" %}
+{% set version = "12.8.93" %}
+{% set cuda_version = "12.8" %}
 {% set cuda_version_next_major = (cuda_version.split(".")[0]|int + 1)|string + ".0a0" %}
+{% set gcc_min_constraint = ">=6" %}
+{% set gcc_constraint = ">=6,<15.0a0" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
-{% set platform = "linux-ppc64le" %}  # [ppc64le]
-{% set platform = "linux-sbsa" %}  # [aarch64]
+{% set platform = "linux-sbsa" %}  # [aarch64 and arm_variant_type == "sbsa"]
+#{% set platform = "linux-aarch64" %}  # [aarch64 and arm_variant_type == "tegra"]
 {% set platform = "windows-x86_64" %}  # [win]
 {% set target_name = "x86_64-linux" %}  # [linux64]
-{% set target_name = "ppc64le-linux" %}  # [ppc64le]
-{% set target_name = "sbsa-linux" %}  # [aarch64]
+{% set target_name = "sbsa-linux" %}  # [aarch64 and arm_variant_type == "sbsa"]
+#{% set target_name = "aarch64-linux" %}  # [aarch64 and arm_variant_type == "tegra"]
 {% set target_name = "x64" %}  # [win]
 {% set extension = "tar.xz" %}  # [not win]
 {% set extension = "zip" %}  # [win]
+{% set exists = "which" %}  # [not win]
+{% set exists = "where" %}  # [win]
+{% set sha256 = "9961b3484b6b71314063709a4f9529654f96782ad39e72bf1e00f070db8210d3" %}  # [linux64]
+{% set sha256 = "dc0b713ce69fd921aa53ac68610717d126fc273a3c554b0465cf44d7e379f467" %}  # [aarch64 and arm_variant_type == "sbsa"]
+{% set sha256 = "9fdc70b4271ed9aad4d64cd7076a7d96ec36512d074b9995fe638de669197391" %}  # [win]
+#{% set sha256 = "2eb267e6ebbe17e5ebc593bae8b83fa927c3e53cbf43ef5c614eff6c94053d10" %}  # [aarch64 and arm_variant_type == "tegra"]
 
 package:
   name: cuda-nvcc-impl-split
@@ -19,43 +27,54 @@ package:
 
 source:
   url: https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvcc/{{ platform }}/cuda_nvcc-{{ platform }}-{{ version }}-archive.{{ extension }}
-  sha256: 7ffba1ada0e4b8c17e451ac7a60d386aa2642ecd08d71202a0b100c98bd74681  # [linux64]
-  sha256: 2934e83a4df2e0f4182e148753cfd1f29af226a280ea459008819531e9edb5b9  # [ppc64le]
-  sha256: 83f130dab0325e12b90fdf1279c0cbbd88acf638ef0a7e0cad72d50855a4f44a  # [aarch64]
-  sha256: 3b14cf8dd9dda4a3b1a9682270d46eef775f018e17650187a8a448a06111f2b8  # [win]
+  sha256: {{ sha256 }}
   patches:
     - nvcc.profile.patch      # [linux]
     - nvcc.profile.patch.win  # [win]
 
 build:
-  number: 0
-  skip: true  # [osx or (linux and s390x)]
+  number: 3
+  binary_relocation: false
+  skip: true  # [osx]
+
+requirements:
+  build:
+    - patchelf             # [linux]
+    - cf-nvidia-tools 1.*  # [linux]
 
 outputs:
   - name: cuda-nvcc-tools
-    files:                                  # [linux]
+    files:   # [linux]
       - bin/*                               # [linux]
+    build:
+      binary_relocation: false
     requirements:
       build:
         - {{ compiler("c") }}
         - {{ compiler("cxx") }}
-        - sysroot_{{ target_platform }} {{ conda_glibc_ver }}.*    # [linux]
+        - {{ stdlib("c") }}
       host:
-        #- arm-variant * {{ arm_variant_type }}  # [aarch64]
-        - cuda-version {{ cuda_version }}
         - {{ pin_subpackage("cuda-crt-tools", exact=True) }}
         - {{ pin_subpackage("cuda-nvvm-tools", exact=True) }}
+        - arm-variant * {{ arm_variant_type }}  # [aarch64]
+        - cuda-version {{ cuda_version }}
       run:
         - {{ pin_compatible("cuda-version", max_pin="x.x") }}
         - {{ pin_subpackage("cuda-crt-tools", exact=True) }}
         - {{ pin_subpackage("cuda-nvvm-tools", exact=True) }}
+        - arm-variant * {{ arm_variant_type }}  # [aarch64]
       run_constrained:
-        - gcc_impl_{{ target_platform }} >=6,<13  # [linux]
-        - arm-variant * {{ arm_variant_type }}    # [aarch64]
+        - gcc_impl_{{ target_platform }} {{ gcc_constraint }}  # [linux]
     test:
+      requires:
+        - patchelf                                                # [linux]
+      files:
+        - patchelf_exclude.txt                                    # [linux]
+        - test-rpath-nvcc.sh                                      # [linux]
       commands:
         - test -f $PREFIX/bin/nvcc                                # [linux]
         - test -f $PREFIX/bin/ptxas                               # [linux]
+        - bash test-rpath-nvcc.sh                                 # [linux]
     about:
       home: https://developer.nvidia.com/cuda-toolkit
       license_file: LICENSE
@@ -86,22 +105,24 @@ outputs:
       - Library\lib\nvptxcompiler_static.lib  # [win]
     requirements:
       build:
-        - sysroot_{{ target_platform }} {{ conda_glibc_ver }}.*    # [linux]
+        - {{ stdlib("c") }}
       host:
-        #- arm-variant * {{ arm_variant_type }}  # [aarch64]
-        - cuda-version {{ cuda_version }}
-        - {{ pin_subpackage("cuda-nvcc-tools", exact=True) }}
         - {{ pin_subpackage("cuda-crt-dev_" + target_platform, exact=True) }}
+        - {{ pin_subpackage("cuda-nvcc-tools", exact=True) }}
         - {{ pin_subpackage("cuda-nvvm-dev_" + target_platform, exact=True) }}
-        - libgcc-ng >=6                         # [linux]
+        - arm-variant * {{ arm_variant_type }}  # [aarch64]
+        - cuda-version {{ cuda_version }}
+        # Use libgcc-ng instead of libgcc
+        - libgcc-ng {{ gcc_min_constraint }}  # [linux]
       run:
         - {{ pin_compatible("cuda-version", max_pin="x.x") }}
         - {{ pin_subpackage("cuda-crt-dev_" + target_platform, exact=True) }}
         - {{ pin_subpackage("cuda-nvvm-dev_" + target_platform, exact=True) }}
-        - libgcc-ng >=6                         # [linux]
-      run_constrained:
-        - gcc_impl_{{ target_platform }} >=6,<13  # [linux]
         - arm-variant * {{ arm_variant_type }}    # [aarch64]
+        # Use libgcc-ng instead of libgcc
+        - libgcc-ng {{ gcc_min_constraint }}  # [linux]
+      run_constrained:
+        - gcc_impl_{{ target_platform }} {{ gcc_constraint }}  # [linux]
     test:
       commands:
         - test -L $PREFIX/targets/{{ target_name }}/bin/nvcc      # [linux]
@@ -125,37 +146,32 @@ outputs:
   - name: cuda-nvcc-impl
     build:
       # libnvvm.so gets corrupted by patchelf. No need to relocate as it is already relocatable
-      binary_relocation: False
+      binary_relocation: false
     run_exports:
       strong:
         - cuda-version >={{ cuda_version }},<{{ cuda_version_next_major }}
-    files:                             # [linux]
+    files:   # [linux]
       - lib/libnvptxcompiler_static.a  # [linux]
     requirements:
-      build:
-        - sysroot_{{ target_platform }} {{ conda_glibc_ver }}.*    # [linux]
       host:
-        #- arm-variant * {{ arm_variant_type }}  # [aarch64]
-        - cuda-version {{ cuda_version }}
-        - cuda-cudart-dev
         - {{ pin_subpackage("cuda-nvvm-impl", exact=True) }}
+        - arm-variant * {{ arm_variant_type }}  # [aarch64]
+        - cuda-cudart-dev
+        - cuda-version {{ cuda_version }}
       run:
         - {{ pin_subpackage("cuda-nvcc-tools", exact=True) }}
         - {{ pin_subpackage("cuda-nvcc-dev_" + target_platform, exact=True) }}
         - {{ pin_subpackage("cuda-nvvm-impl", exact=True) }}
         - {{ pin_compatible("cuda-version", max_pin="x.x") }}
+        - arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-cudart-dev
       run_constrained:
-        - gcc_impl_{{ target_platform }} >=6,<13  # [linux]
-        - arm-variant * {{ arm_variant_type }}    # [aarch64]
-        - vc >={{ VCVER }}                        # [win]
+        - gcc_impl_{{ target_platform }} {{ gcc_constraint }}  # [linux]
     test:
       requires:
         - {{ compiler("c") }}
         - {{ compiler("cxx") }}
-        #- gxx              # [linux]
-        #- gcc              # [linux]
-        - vs{{ VSYEAR }}_win-64 =={{ CL_VERSION }}  # [win]
+        - {{ stdlib("c") }}
         - cmake
         - cuda-driver-dev  # [linux]
         - git              # [linux]
@@ -163,7 +179,8 @@ outputs:
       files:
         - test.cu
         - CMakeLists.txt
-        - run_cmake_cuda_tests.sh  # [linux]
+        - run_nvcc_tests.sh   # [linux]
+        - run_nvcc_tests.bat  # [win]
       commands:
         # these symlinks are provided by the gxx and gcc packages on conda-forge
         - ln -sf ${PREFIX}/bin/x86_64-conda-linux-gnu-g++ ${PREFIX}/bin/g++     # [linux and x86_64]
@@ -174,10 +191,9 @@ outputs:
         # compared to conda-forge. NB conda-forge isn't building this for linux-aarch64 currently.
         - if [ ! -f "${PREFIX}/bin/ar" ]; then ln -s "${AR}" "${PREFIX}/bin/ar"; fi # [linux and aarch64]
         - test -L $PREFIX/lib/libnvptxcompiler_static.a  # [linux]
-        - nvcc --version
-        - nvcc --verbose test.cu
-        - cmake -S . -B ./build -G=Ninja && cmake --build ./build -v
-        - bash ./run_cmake_cuda_tests.sh  # [linux and (x86_64 or aarch64)]
+        - {{ exists }} nvcc
+        - ./run_nvcc_tests.sh   # [linux]
+        - .\run_nvcc_tests.bat  # [win]
     about:
       home: https://developer.nvidia.com/cuda-toolkit
       license_file: LICENSE
@@ -194,11 +210,9 @@ outputs:
       - Library\bin\crt  # [win]
     requirements:
       host:
-        #- arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-version {{ cuda_version }}
       run:
         - {{ pin_compatible("cuda-version", max_pin="x.x") }}
-      run_constrained:
         - arm-variant * {{ arm_variant_type }}    # [aarch64]
     test:
       commands:
@@ -226,11 +240,9 @@ outputs:
       - Library\include\crt                    # [win]
     requirements:
       host:
-        #- arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-version {{ cuda_version }}
       run:
         - {{ pin_compatible("cuda-version", max_pin="x.x") }}
-      run_constrained:
         - arm-variant * {{ arm_variant_type }}    # [aarch64]
     test:
       commands:
@@ -256,17 +268,21 @@ outputs:
       build:
         - {{ compiler("c") }}
         - {{ compiler("cxx") }}
+        - {{ stdlib("c") }}
       host:
-        #- arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-version {{ cuda_version }}
       run:
         - {{ pin_compatible("cuda-version", max_pin="x.x") }}
-      run_constrained:
         - arm-variant * {{ arm_variant_type }}    # [aarch64]
     test:
+      requires:
+        - patchelf                                                # [linux]
+      files:
+        - test-rpath-nvvm.sh                                      # [linux]
       commands:
         - test -d $PREFIX/nvvm                                    # [linux]
         - test -f $PREFIX/nvvm/bin/cicc                           # [linux]
+        - bash test-rpath-nvvm.sh                                 # [linux]
         - if not exist %LIBRARY_PREFIX%\nvvm\bin\cicc.exe exit 1  # [win]
         - if not exist %LIBRARY_PREFIX%\nvvm\libdevice exit 1     # [win]
     about:
@@ -286,11 +302,9 @@ outputs:
       - targets/{{ target_name }}/nvvm  # [linux]
     requirements:
       host:
-        #- arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-version {{ cuda_version }}
       run:
         - {{ pin_compatible("cuda-version", max_pin="x.x") }}
-      run_constrained:
         - arm-variant * {{ arm_variant_type }}    # [aarch64]
     test:
       commands:
@@ -308,7 +322,18 @@ outputs:
   - name: cuda-nvvm-impl
     build:
       # libnvvm.so gets corrupted by patchelf. No need to relocate as it is already relocatable.
-      binary_relocation: False
+      binary_relocation: false
+      # This is a workaround to ignore the overlinking error for problematic *.so files.
+      # The reason is that in the Amazon Linux 2-based Docker container, there's py-lief version 0.12.3. 
+      # In the Rocky 8 container, there's 0.16.4, which seems to have this bug. 
+      # See also:
+      # https://github.com/anaconda/docker-images/blob/main/anaconda-pkg-build/linux/rocky8/Dockerfile
+      # https://github.com/conda/conda-build/issues/5665
+      # https://github.com/conda-forge/conda-build-feedstock/pull/251
+      # https://github.com/conda-forge/lief-feedstock/pull/57#issuecomment-2770881269
+      # This workaround should be removed when the conda-build fix is merged/py-lief pinned and the rocky 8 docker image rebuilt.
+      overlinking_ignore_patterns: # [linux and aarch64]
+        - "nvvm/lib64/libnvvm.so*"  # [linux and aarch64]
     files:
       - nvvm/include          # [linux]
       - nvvm/lib64            # [linux]
@@ -318,17 +343,21 @@ outputs:
       build:
         - {{ compiler("c") }}
         - {{ compiler("cxx") }}
+        - {{ stdlib("c") }}
       host:
-        #- arm-variant * {{ arm_variant_type }}  # [aarch64]
         - cuda-version {{ cuda_version }}
       run:
         - {{ pin_compatible("cuda-version", max_pin="x.x") }}
-      run_constrained:
         - arm-variant * {{ arm_variant_type }}    # [aarch64]
     test:
+      requires:
+        - patchelf                                                # [linux]
+      files:
+        - test-rpath-nvvm.sh                                      # [linux]
       commands:
         - test -d $PREFIX/nvvm/include  # [linux]
         - test -d $PREFIX/nvvm/lib64    # [linux]
+        - bash test-rpath-nvvm.sh       # [linux]
         - if not exist %LIBRARY_PREFIX%\nvvm\include exit 1  # [win]
         - if not exist %LIBRARY_PREFIX%\nvvm\lib exit 1      # [win]
     about:
