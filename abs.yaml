@@ -1,4 +1,9 @@
-# without this, only the linux-64 noarch package will be uploaded
-# which is not what we want
-noarch_upload:
-  - all
+build_parameters:
+  - "--suppress-variables"
+  #- "--skip-existing"
+  - "--error-overlinking"
+
+staging_channel_upload_target: ctk-13.0.2-build-1
+
+channels:
+  - https://staging.continuum.io/pbp/ctk-13.0.2-build-1

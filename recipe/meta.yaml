@@ -6,11 +6,11 @@
 {% set cuda_version_next_major = (cuda_version.split(".")[0]|int + 1)|string + ".0a0" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
 {% set platform = "linux-sbsa" %}  # [aarch64 and arm_variant_type == "sbsa"]
-#{% set platform = "linux-aarch64" %}  # [aarch64 and arm_variant_type == "tegra"]
+{% set platform = "linux-aarch64" %}  # [aarch64 and arm_variant_type == "tegra"]
 {% set platform = "windows-x86_64" %}  # [win]
 {% set target_name = "x86_64-linux" %}  # [linux64]
 {% set target_name = "sbsa-linux" %}  # [aarch64 and arm_variant_type == "sbsa"]
-#{% set target_name = "aarch64-linux" %}  # [aarch64 and arm_variant_type == "tegra"]
+{% set target_name = "aarch64-linux" %}  # [aarch64 and arm_variant_type == "tegra"]
 {% set target_name = "x64" %}  # [win]
 {% set extension = "tar.xz" %}  # [not win]
 {% set extension = "zip" %}  # [win]
@@ -68,15 +68,13 @@ build:
 
 requirements:
   build:
-    - patchelf             # [linux]
+    - patchelf  # [linux]
     - cf-nvidia-tools 1.*  # [linux]
 
 outputs:
   - name: cuda-nvcc-tools
     files:   # [linux]
       - bin/*                               # [linux]
-    build:
-      binary_relocation: false
     requirements:
       build:
         - {{ compiler("c") }}
@@ -113,11 +111,12 @@ outputs:
       description: |
         Compiler for CUDA applications.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
   - name: cuda-nvcc-dev_{{ target_platform }}
     build:
       noarch: generic
-      missing_dso_whitelist:                     # [win]
+      missing_dso_whitelist:   # [win]
         - "*/api-ms-win-core-winrt-*.dll"        # [win]
     run_exports:
       strong:
@@ -165,6 +164,7 @@ outputs:
       description: |
         Compiler for CUDA applications.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
   - name: libnvptxcompiler-dev
     files:  # [linux]
@@ -192,6 +192,7 @@ outputs:
       description: |
         Compiler for CUDA applications.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
   - name: libnvptxcompiler-dev_{{ target_platform }}
     build:
@@ -222,6 +223,7 @@ outputs:
       description: |
         Compiler for CUDA applications.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
   - name: cuda-nvcc-impl
     build:
@@ -246,15 +248,27 @@ outputs:
         - cuda-cudart-dev
       run_constrained:
         - gcc_impl_{{ target_platform }} {{ gcc_constraint }}  # [linux]
+        - vc >={{ VCVER }}                      # [win]
     test:
       requires:
         - {{ compiler("c") }}
         - {{ compiler("cxx") }}
         - {{ stdlib("c") }}
+        # The following three compiler dependencies are kept for conda-forge compatibility.
+        #   * With an activation script setting NVCC_CCBIN envrionment variable to $CC,
+        #    it is possible to remove the 'gxx' and 'gcc' dependencies from test requirements.
+        #    However, the conda package 'cuda-nvcc' already sets NVCC_CCBIN envrionment variable to $CC,
+        #    using '-ccbin=$CC' on the NVCC_PREPEND_FLAGS envrionment variable via an activation script.
+        #    Please refer to the activation script on the 'cuda-nvcc-feedstock' for more details.
+        #  * The Windows compiler dependency resolves to the same version as the aggregate's cbc.yaml file defines.
+        #    Therefore, it is kept commented out.
+        - gxx              # [linux]
+        - gcc              # [linux]
+        #- vs{{ VSYEAR }}_win-64 =={{ CL_VERSION }}  # [win]
         - cmake
         - cuda-driver-dev  # [linux]
         - git              # [linux]
-        - ninja
+        - ninja-base
       files:
         - test.cu
         - CMakeLists.txt
@@ -276,6 +290,7 @@ outputs:
       description: |
         Compiler for CUDA applications.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
   - name: cuda-crt-tools
     files:
@@ -303,6 +318,7 @@ outputs:
       description: |
         CUDA internal tools.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
   - name: cuda-crt-dev_{{ target_platform }}
     build:
@@ -332,6 +348,7 @@ outputs:
       description: |
         CUDA internal headers.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
   - name: cuda-nvvm-tools
     files:
@@ -368,11 +385,12 @@ outputs:
       description: |
         Compiler for CUDA applications.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
   - name: cuda-nvvm-dev_{{ target_platform }}
     build:
       noarch: generic
-    files:                              # [linux]
+    files:   # [linux]
       - targets/{{ target_name }}/nvvm  # [linux]
     requirements:
       host:
@@ -392,22 +410,12 @@ outputs:
       description: |
         Compiler for CUDA applications.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
   - name: cuda-nvvm-impl
     build:
       # libnvvm.so gets corrupted by patchelf. No need to relocate as it is already relocatable.
       binary_relocation: false
-      # This is a workaround to ignore the overlinking error for problematic *.so files.
-      # The reason is that in the Amazon Linux 2-based Docker container, there's py-lief version 0.12.3. 
-      # In the Rocky 8 container, there's 0.16.4, which seems to have this bug. 
-      # See also:
-      # https://github.com/anaconda/docker-images/blob/main/anaconda-pkg-build/linux/rocky8/Dockerfile
-      # https://github.com/conda/conda-build/issues/5665
-      # https://github.com/conda-forge/conda-build-feedstock/pull/251
-      # https://github.com/conda-forge/lief-feedstock/pull/57#issuecomment-2770881269
-      # This workaround should be removed when the conda-build fix is merged/py-lief pinned and the rocky 8 docker image rebuilt.
-      overlinking_ignore_patterns: # [linux and aarch64]
-        - "nvvm/lib64/libnvvm.so*"  # [linux and aarch64]
     files:
       - nvvm/include          # [linux]
       - nvvm/lib64            # [linux]
@@ -442,6 +450,7 @@ outputs:
       description: |
         Compiler for CUDA applications.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
 about:
   home: https://developer.nvidia.com/cuda-toolkit
@@ -452,8 +461,12 @@ about:
   description: |
     Compiler for CUDA applications.
   doc_url: https://docs.nvidia.com/cuda/index.html
+  dev_url: https://docs.nvidia.com/cuda/index.html
 
 extra:
+  skip-lints:
+    - license_file_overspecified
+    - missing_tests
   feedstock-name: cuda-nvcc-impl
   recipe-maintainers:
     - conda-forge/cuda
