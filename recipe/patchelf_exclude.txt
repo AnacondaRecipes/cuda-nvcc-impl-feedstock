@@ -1,4 +1,6 @@
-link.stub
-prelink.stub
+crt/link.stub
+crt/prelink.stub
 nvcc.profile
 patchelf
+link.stub
+prelink.stub

@@ -1,9 +1,7 @@
 * text=auto
 
 *.patch binary
-*.patch.win text eol=crlf
 *.diff binary
-*.patch.win binary
 meta.yaml text eol=lf
 build.sh text eol=lf
 bld.bat text eol=crlf
@@ -26,4 +24,5 @@ bld.bat text eol=crlf
 /README.md linguist-generated=true
 azure-pipelines.yml linguist-generated=true
 build-locally.py linguist-generated=true
+pixi.toml linguist-generated=true
 shippable.yml linguist-generated=true

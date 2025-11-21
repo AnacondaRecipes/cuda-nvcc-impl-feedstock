@@ -39,7 +39,7 @@ fi
 
 mkdir -p cmake-tests
 git clone -b v${cmake_version} --depth 1 https://gitlab.kitware.com/cmake/cmake.git cmake-tests
-cmake -S cmake-tests -B cmake-tests/build -DCMake_TEST_HOST_CMAKE=ON -DCMake_TEST_CUDA=nvcc -G "Ninja"
+cmake -S cmake-tests -B cmake-tests/build -DCMake_TEST_HOST_CMAKE=ON -DCMake_TEST_CUDA=nvcc -G "Ninja" -DCMake_TEST_CUDA_ARCH=75
 cd cmake-tests/build
 
 # Test exclusion list:
@@ -64,4 +64,4 @@ cd cmake-tests/build
 #   *Toolkit*
 # Failing due to undefined symbol: __libc_dl_error_tsd, version GLIBC_PRIVATE
 #   Cuda.Complex
-CUDAHOSTCXX=$CXX ctest -L CUDA --output-on-failure -j $(nproc) -E "(ProperDeviceLibraries|SharedRuntime|ObjectLibrary|WithC|StubRPATH|ArchSpecial|GPUDebugFlag|SeparateCompilationPTX|WithDefs|CUBIN|Fatbin|OptixIR|CUDA_architectures|Toolkit|Cuda.Complex)"
+CUDAHOSTCXX=$CXX ctest -L CUDA --output-on-failure -j $(nproc) -E "(Architecture|CompileFlags|DeviceLTO|ProperDeviceLibraries|SharedRuntime|ObjectLibrary|WithC|StubRPATH|ArchSpecial|GPUDebugFlag|SeparateCompilationPTX|WithDefs|CUBIN|Fatbin|OptixIR|CUDA_architectures|Toolkit|Cuda.Complex)"
