@@ -7,12 +7,10 @@
 {% set gcc_min_constraint = ">=6" %}
 {% set gcc_constraint = ">=6,<15.0a0" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
-{% set platform = "linux-ppc64le" %}  # [ppc64le]
 {% set platform = "linux-sbsa" %}  # [aarch64 and arm_variant_type == "sbsa"]
 {% set platform = "linux-aarch64" %}  # [aarch64 and arm_variant_type == "tegra"]
 {% set platform = "windows-x86_64" %}  # [win]
 {% set target_name = "x86_64-linux" %}  # [linux64]
-{% set target_name = "ppc64le-linux" %}  # [ppc64le]
 {% set target_name = "sbsa-linux" %}  # [aarch64 and arm_variant_type == "sbsa"]
 {% set target_name = "aarch64-linux" %}  # [aarch64 and arm_variant_type == "tegra"]
 {% set target_name = "x64" %}  # [win]
@@ -37,9 +35,9 @@ source:
     - nvcc.profile.patch.win  # [win]
 
 build:
-  number: 2
+  number: 0
   binary_relocation: false
-  skip: true  # [osx or ppc64le]
+  skip: true  # [osx]
 
 requirements:
   build:
@@ -48,6 +46,8 @@ requirements:
 
 outputs:
   - name: cuda-nvcc-tools
+    build:
+      binary_relocation: false
     files:   # [linux]
       - bin/__nvcc_device_query  # [linux]
       - bin/bin2c                # [linux]
@@ -89,10 +89,12 @@ outputs:
       license_file: LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: Architecture independent part of CUDA NVCC compiler.
       description: |
         Compiler for CUDA applications.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
   - name: cuda-nvcc-dev_{{ target_platform }}
     build:
@@ -141,10 +143,12 @@ outputs:
       license_file: LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: Target architecture dependent parts of CUDA NVCC compiler.
       description: |
         Compiler for CUDA applications.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
   - name: libnvptxcompiler-dev
     files:  # [linux]
@@ -168,10 +172,12 @@ outputs:
       license_file: LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: Target architecture dependent parts of CUDA nvptxcompiler.
       description: |
         Compiler for CUDA applications.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
   - name: libnvptxcompiler-dev_{{ target_platform }}
     build:
@@ -198,10 +204,12 @@ outputs:
       license_file: LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: Target architecture dependent parts of CUDA nvptxcompiler.
       description: |
         Compiler for CUDA applications.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
   - name: cuda-nvcc-impl
     build:
@@ -256,10 +264,12 @@ outputs:
       license_file: LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_other: Other
       summary: Compiler for CUDA applications.
       description: |
         Compiler for CUDA applications.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
   - name: cuda-crt-tools
     files:
@@ -282,10 +292,12 @@ outputs:
       license_file: LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: CUDA internal tools.
       description: |
         CUDA internal tools.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
   - name: cuda-crt-dev_{{ target_platform }}
     build:
@@ -311,10 +323,12 @@ outputs:
       license_file: LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: CUDA internal headers.
       description: |
         CUDA internal headers.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
   - name: cuda-nvvm-tools
     files:
@@ -347,10 +361,12 @@ outputs:
       license_file: LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: Compiler for CUDA applications.
       description: |
         Compiler for CUDA applications.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
   - name: cuda-nvvm-dev_{{ target_platform }}
     build:
@@ -371,15 +387,20 @@ outputs:
       license_file: LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: Compiler for CUDA applications.
       description: |
         Compiler for CUDA applications.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
   - name: cuda-nvvm-impl
     build:
       # libnvvm.so gets corrupted by patchelf. No need to relocate as it is already relocatable.
       binary_relocation: false
+      overlinking_ignore_patterns:
+        # Workaround for LIEF's 'not a valid TAG' error
+        - '*libnvvm*.so*'         # [linux and aarch64]
     files:
       - nvvm/include          # [linux]
       - nvvm/lib64            # [linux]
@@ -410,20 +431,24 @@ outputs:
       license_file: LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: Compiler for CUDA applications.
       description: |
         Compiler for CUDA applications.
       doc_url: https://docs.nvidia.com/cuda/index.html
+      dev_url: https://docs.nvidia.com/cuda/index.html
 
 about:
   home: https://developer.nvidia.com/cuda-toolkit
   license_file: LICENSE
   license: LicenseRef-NVIDIA-End-User-License-Agreement
   license_url: https://docs.nvidia.com/cuda/eula/index.html
+  license_family: Other
   summary: Compiler for CUDA applications.
   description: |
     Compiler for CUDA applications.
   doc_url: https://docs.nvidia.com/cuda/index.html
+  dev_url: https://docs.nvidia.com/cuda/index.html
 
 extra:
   feedstock-name: cuda-nvcc-impl
