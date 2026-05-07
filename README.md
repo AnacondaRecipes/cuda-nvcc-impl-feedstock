@@ -18,20 +18,6 @@ Documentation: https://docs.nvidia.com/cuda/index.html
 Compiler for CUDA applications.
 
 
-About cuda-crt-dev_linux-64
----------------------------
-
-Home: https://developer.nvidia.com/cuda-toolkit
-
-Package license: [LicenseRef-NVIDIA-End-User-License-Agreement](https://docs.nvidia.com/cuda/eula/index.html)
-
-Summary: CUDA internal headers.
-
-Documentation: https://docs.nvidia.com/cuda/index.html
-
-CUDA internal headers.
-
-
 About cuda-crt-tools
 --------------------
 
@@ -44,20 +30,6 @@ Summary: CUDA internal tools.
 Documentation: https://docs.nvidia.com/cuda/index.html
 
 CUDA internal tools.
-
-
-About cuda-nvcc-dev_linux-64
-----------------------------
-
-Home: https://developer.nvidia.com/cuda-toolkit
-
-Package license: [LicenseRef-NVIDIA-End-User-License-Agreement](https://docs.nvidia.com/cuda/eula/index.html)
-
-Summary: Target architecture dependent parts of CUDA NVCC compiler.
-
-Documentation: https://docs.nvidia.com/cuda/index.html
-
-Compiler for CUDA applications.
 
 
 About cuda-nvcc-impl
@@ -82,20 +54,6 @@ Home: https://developer.nvidia.com/cuda-toolkit
 Package license: [LicenseRef-NVIDIA-End-User-License-Agreement](https://docs.nvidia.com/cuda/eula/index.html)
 
 Summary: Architecture independent part of CUDA NVCC compiler.
-
-Documentation: https://docs.nvidia.com/cuda/index.html
-
-Compiler for CUDA applications.
-
-
-About cuda-nvvm-dev_linux-64
-----------------------------
-
-Home: https://developer.nvidia.com/cuda-toolkit
-
-Package license: [LicenseRef-NVIDIA-End-User-License-Agreement](https://docs.nvidia.com/cuda/eula/index.html)
-
-Summary: Compiler for CUDA applications.
 
 Documentation: https://docs.nvidia.com/cuda/index.html
 
@@ -138,6 +96,48 @@ Home: https://developer.nvidia.com/cuda-toolkit
 Package license: [LicenseRef-NVIDIA-End-User-License-Agreement](https://docs.nvidia.com/cuda/eula/index.html)
 
 Summary: Target architecture dependent parts of CUDA nvptxcompiler.
+
+Documentation: https://docs.nvidia.com/cuda/index.html
+
+Compiler for CUDA applications.
+
+
+About cuda-crt-dev_linux-64
+---------------------------
+
+Home: https://developer.nvidia.com/cuda-toolkit
+
+Package license: [LicenseRef-NVIDIA-End-User-License-Agreement](https://docs.nvidia.com/cuda/eula/index.html)
+
+Summary: CUDA internal headers.
+
+Documentation: https://docs.nvidia.com/cuda/index.html
+
+CUDA internal headers.
+
+
+About cuda-nvcc-dev_linux-64
+----------------------------
+
+Home: https://developer.nvidia.com/cuda-toolkit
+
+Package license: [LicenseRef-NVIDIA-End-User-License-Agreement](https://docs.nvidia.com/cuda/eula/index.html)
+
+Summary: Target architecture dependent parts of CUDA NVCC compiler.
+
+Documentation: https://docs.nvidia.com/cuda/index.html
+
+Compiler for CUDA applications.
+
+
+About cuda-nvvm-dev_linux-64
+----------------------------
+
+Home: https://developer.nvidia.com/cuda-toolkit
+
+Package license: [LicenseRef-NVIDIA-End-User-License-Agreement](https://docs.nvidia.com/cuda/eula/index.html)
+
+Summary: Compiler for CUDA applications.
 
 Documentation: https://docs.nvidia.com/cuda/index.html
 
