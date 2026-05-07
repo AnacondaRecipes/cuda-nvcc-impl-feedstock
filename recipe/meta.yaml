@@ -108,6 +108,7 @@ outputs:
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
       summary: Architecture independent part of CUDA NVCC compiler.
+      license_family: Other
       description: |
         Compiler for CUDA applications.
       doc_url: https://docs.nvidia.com/cuda/index.html
@@ -160,6 +161,7 @@ outputs:
       license_file: nvcc/LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: Target architecture dependent parts of CUDA NVCC compiler.
       description: |
         Compiler for CUDA applications.
@@ -188,6 +190,7 @@ outputs:
       license_file: libnvptxcompiler/LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: Target architecture dependent parts of CUDA nvptxcompiler.
       description: |
         Compiler for CUDA applications.
@@ -219,6 +222,7 @@ outputs:
       license_file: libnvptxcompiler/LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: Target architecture dependent parts of CUDA nvptxcompiler.
       description: |
         Compiler for CUDA applications.
@@ -286,6 +290,7 @@ outputs:
       license_file: nvcc/LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: Compiler for CUDA applications.
       description: |
         Compiler for CUDA applications.
@@ -314,6 +319,7 @@ outputs:
       license_file: crt/LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: CUDA internal tools.
       description: |
         CUDA internal tools.
@@ -344,6 +350,7 @@ outputs:
       license_file: crt/LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: CUDA internal headers.
       description: |
         CUDA internal headers.
@@ -381,6 +388,7 @@ outputs:
       license_file: nvvm/LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: Compiler for CUDA applications.
       description: |
         Compiler for CUDA applications.
@@ -406,6 +414,7 @@ outputs:
       license_file: nvvm/LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: Compiler for CUDA applications.
       description: |
         Compiler for CUDA applications.
@@ -446,6 +455,7 @@ outputs:
       license_file: nvvm/LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
+      license_family: Other
       summary: Compiler for CUDA applications.
       description: |
         Compiler for CUDA applications.
@@ -457,6 +467,7 @@ about:
   license_file: LICENSE
   license: LicenseRef-NVIDIA-End-User-License-Agreement
   license_url: https://docs.nvidia.com/cuda/eula/index.html
+  license_family: Other
   summary: Compiler for CUDA applications.
   description: |
     Compiler for CUDA applications.
@@ -464,9 +475,6 @@ about:
   dev_url: https://docs.nvidia.com/cuda/index.html
 
 extra:
-  skip-lints:
-    - license_file_overspecified
-    - missing_tests
   feedstock-name: cuda-nvcc-impl
   recipe-maintainers:
     - conda-forge/cuda
