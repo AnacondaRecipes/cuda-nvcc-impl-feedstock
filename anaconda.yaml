@@ -3,3 +3,22 @@ upstream_sources:
   - webpage:
       url: https://api.anaconda.org/package/conda-forge/cuda-nvcc-impl
       regex: '"version":\s*"([^"]+)"'
+    packages:
+      - cuda-crt-dev_linux-64
+      - cuda-crt-dev_linux-aarch64
+      - cuda-crt-dev_win-64
+      - cuda-crt-tools
+      - cuda-nvcc-dev_linux-64
+      - cuda-nvcc-dev_linux-aarch64
+      - cuda-nvcc-dev_win-64
+      - cuda-nvcc-impl
+      - cuda-nvcc-tools
+      - cuda-nvvm-dev_linux-64
+      - cuda-nvvm-dev_linux-aarch64
+      - cuda-nvvm-dev_win-64
+      - cuda-nvvm-impl
+      - cuda-nvvm-tools
+      - libnvptxcompiler-dev
+      - libnvptxcompiler-dev_linux-64
+      - libnvptxcompiler-dev_linux-aarch64
+      - libnvptxcompiler-dev_win-64
