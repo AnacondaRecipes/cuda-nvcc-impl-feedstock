@@ -39,7 +39,7 @@ fi
 
 mkdir -p cmake-tests
 git clone -b v${cmake_version} --depth 1 https://gitlab.kitware.com/cmake/cmake.git cmake-tests
-cmake -S cmake-tests -B cmake-tests/build -DCMake_TEST_HOST_CMAKE=ON -DCMake_TEST_CUDA=nvcc -G "Ninja" -DCMake_TEST_CUDA_ARCH=75
+cmake -S cmake-tests -B cmake-tests/build -DCMake_TEST_HOST_CMAKE=ON -DCMake_TEST_CUDA=NVIDIA -G "Ninja" -DCMake_TEST_CUDA_ARCH=75
 cd cmake-tests/build
 
 # Test exclusion list:
