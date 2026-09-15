@@ -39,7 +39,7 @@ fi
 
 mkdir -p cmake-tests
 git clone -b v${cmake_version} --depth 1 https://gitlab.kitware.com/cmake/cmake.git cmake-tests
-cmake -S cmake-tests -B cmake-tests/build -DCMake_TEST_HOST_CMAKE=ON -DCMake_TEST_CUDA=nvcc -G "Ninja" -DCMake_TEST_CUDA_ARCH=75
+cmake -S cmake-tests -B cmake-tests/build -DCMake_TEST_HOST_CMAKE=ON -DCMake_TEST_CUDA=NVIDIA -G "Ninja" -DCMake_TEST_CUDA_ARCH=75
 cd cmake-tests/build
 
 # Test exclusion list:
@@ -62,6 +62,7 @@ cd cmake-tests/build
 #   CudaOnly.OptixIR
 #   RunCMake.CUDA_architectures
 #   *Toolkit*
+#   Cuda.Sanitizer, CudaOnly.Sanitizer (cudaMalloc -> cudaErrorInsufficientDriver)
 # Failing due to undefined symbol: __libc_dl_error_tsd, version GLIBC_PRIVATE
 #   Cuda.Complex
-CUDAHOSTCXX=$CXX ctest -L CUDA --output-on-failure -j $(nproc) -E "(Architecture|Bin2C|CompileFlags|DeviceLTO|ProperDeviceLibraries|SharedRuntime|ObjectLibrary|WithC|StubRPATH|ArchSpecial|GPUDebugFlag|SeparateCompilationPTX|WithDefs|CUBIN|Fatbin|OptixIR|CUDA_architectures|Toolkit|Cuda.Complex)"
+CUDAHOSTCXX=$CXX ctest -L CUDA --output-on-failure -j $(nproc) -E "(Architecture|Bin2C|CompileFlags|DeviceLTO|ProperDeviceLibraries|SharedRuntime|ObjectLibrary|WithC|StubRPATH|ArchSpecial|GPUDebugFlag|SeparateCompilationPTX|WithDefs|CUBIN|Fatbin|OptixIR|CUDA_architectures|Toolkit|Cuda.Complex|Sanitizer)"

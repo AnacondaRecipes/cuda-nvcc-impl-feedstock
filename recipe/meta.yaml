@@ -1,40 +1,48 @@
 {% set gcc_constraint = ">=6,<16.0a0" %}
 {% set gcc_min_constraint = ">=6" %}
 {% set name = "cuda-nvcc-impl" %}
-{% set version = "13.3.73" %}
-{% set cuda_version = "13.3" %}
+{% set version = "13.4.59" %}
+{% set cuda_version = "13.4" %}
 {% set cuda_version_next_major = (cuda_version.split(".")[0]|int + 1)|string + ".0a0" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
 {% set platform = "linux-sbsa" %}  # [aarch64 and arm_variant_type == "sbsa"]
 {% set platform = "linux-aarch64" %}  # [aarch64 and arm_variant_type == "tegra"]
-{% set platform = "windows-x86_64" %}  # [win]
+{% set platform = "windows-x86_64" %}  # [win and not arm64]
+{% set platform = "windows-arm64" %}  # [win and arm64]
 {% set target_name = "x86_64-linux" %}  # [linux64]
 {% set target_name = "sbsa-linux" %}  # [aarch64 and arm_variant_type == "sbsa"]
 {% set target_name = "aarch64-linux" %}  # [aarch64 and arm_variant_type == "tegra"]
-{% set target_name = "x64" %}  # [win]
+{% set target_name = "x64" %}  # [win and not arm64]
+{% set target_name = "arm64" %}  # [win and arm64]
+{% set other_win_target = "win-arm64" %}  # [win and not arm64]
+{% set other_win_target = "win-64" %}  # [win and arm64]
 {% set extension = "tar.xz" %}  # [not win]
 {% set extension = "zip" %}  # [win]
 {% set exists = "which" %}  # [not win]
 {% set exists = "where" %}  # [win]
 
-{% set nvcc_sha256 = "2ff9f9954060794a1c5134a933ccb45bec723d866b2629dadfe4a1a313f21068" %}  # [linux64]
-{% set nvcc_sha256 = "87044b338bf1cb062512c4bc790dd24d1c61b043119b5743f583128a954474a8" %}  # [aarch64 and arm_variant_type == "sbsa"]
-{% set nvcc_sha256 = "270214eaee58e49f8fca52a910a46afbfab227858e70897cba8afae10826280b" %}  # [win]
+{% set nvcc_sha256 = "0c08d1df80b5d0bd081778d392446ab50a6a54b047c0136b39c8dbfdf2cfed3f" %}  # [linux64]
+{% set nvcc_sha256 = "8b98a77f0a4b34bf4eee30154ceb3dc9d4099129f886ed42d7d49c2c969514bc" %}  # [aarch64 and arm_variant_type == "sbsa"]
+{% set nvcc_sha256 = "06a4fe6ec543030c5e5a7b85493cda90612015d9fff2a54ed0227162c937ea46" %}  # [win and not arm64]
+{% set nvcc_sha256 = "4d26510f9d5b644e784a02b13423f9c8b79f8b15613ea0bb325bad42ed3443c4" %}  # [win and arm64]
 #{% set nvcc_sha256 = "2eb267e6ebbe17e5ebc593bae8b83fa927c3e53cbf43ef5c614eff6c94053d10" %}  # [aarch64 and arm_variant_type == "tegra"]
 
-{% set crt_sha256 = "1251aa9d668c607a103489cd2250773701e83a313e355578044622cf36713a9d" %}  # [linux64]
-{% set crt_sha256 = "d28e00e9455fac2c2defd6459a2dbcf118d13eb950646074290bc0d29e32a239" %}  # [aarch64 and arm_variant_type == "sbsa"]
-{% set crt_sha256 = "9227ec7c80db10b7cb0d4ee71ed62ec7ae36e67890216413ab6f9afa35d577f0" %}  # [win]
+{% set crt_sha256 = "0a62d47788ffc1ec9d85c248d61a0941b8f0c47c6eeba9a26e27c01955094d3c" %}  # [linux64]
+{% set crt_sha256 = "157f1a3ee38d1bd690c7461b5db4981414e39025dcc8a0c7dd2076cc48887ff1" %}  # [aarch64 and arm_variant_type == "sbsa"]
+{% set crt_sha256 = "f969a0e3b086a48f940563cd1b965cb5197fd9540c79cc952b1abfa479f9ede7" %}  # [win and not arm64]
+{% set crt_sha256 = "a84f570d06497cf14187ddf9a2d656d752aaf66b2025c11eb93af01a8a1ce5ff" %}  # [win and arm64]
 #{% set crt_sha256 = "2eb267e6ebbe17e5ebc593bae8b83fa927c3e53cbf43ef5c614eff6c94053d10" %}  # [aarch64 and arm_variant_type == "tegra"]
 
-{% set nvvm_sha256 = "206b1ab4979c09b5c32f8bf907c42bc9e16cd7454cf6036f524c45a58d060f93" %}  # [linux64]
-{% set nvvm_sha256 = "4bdb28ca53b714ae48887921f462a913b6806dd847978f8eba40434c85d1016f" %}  # [aarch64 and arm_variant_type == "sbsa"]
-{% set nvvm_sha256 = "ca8f11d5173ac16a166be8fafefbf9676542a097de1fce61b3f17696dffc1f27" %}  # [win]
+{% set nvvm_sha256 = "8966b24692ef664b77a3d3411a0c82b4960a2d6a179e0281dac0752c5c1518c7" %}  # [linux64]
+{% set nvvm_sha256 = "2f7804334b784f75ddd7f47bb4827e82c1e19c7d2123936178e4c5ec85e16940" %}  # [aarch64 and arm_variant_type == "sbsa"]
+{% set nvvm_sha256 = "a7a07bcc21cc05bce83eedebcbcd9b9f5418c58316b0fa28a57cb2c548b29841" %}  # [win and not arm64]
+{% set nvvm_sha256 = "2d051ea3fffddf67458fe66004e7045015409709c57f8cdcdade88d479b62e47" %}  # [win and arm64]
 #{% set nvvm_sha256 = "2eb267e6ebbe17e5ebc593bae8b83fa927c3e53cbf43ef5c614eff6c94053d10" %}  # [aarch64 and arm_variant_type == "tegra"]
 
-{% set libnvptxcompiler_sha256 = "f92bb1263276341c6a15870548e8f52426b263066a026d469b027263817b281f" %}  # [linux64]
-{% set libnvptxcompiler_sha256 = "a8b415c6a3f433811bf959a63d7bc003cd8b9dd56904db26b874d30cb9df3ab2" %}  # [aarch64 and arm_variant_type == "sbsa"]
-{% set libnvptxcompiler_sha256 = "28123a511d9effd4e0b518baad740566c5bf495f4657efa5ec048ac79c2e5ccf" %}  # [win]
+{% set libnvptxcompiler_sha256 = "a2a48ace110c24515c3862a87f3bc22d2427e06085442c66e3d826d49e7c5d4c" %}  # [linux64]
+{% set libnvptxcompiler_sha256 = "398f1bfd0e0d904b68b74d99878ff3a2561061ec370777eca491d22a1cb401e7" %}  # [aarch64 and arm_variant_type == "sbsa"]
+{% set libnvptxcompiler_sha256 = "4de2e70b56ae5296b39317ebd55dbb814f2ac31506c4d3ef97bfbded1cdf8cc9" %}  # [win and not arm64]
+{% set libnvptxcompiler_sha256 = "1bdbb15fb706d0b1dea0104382696636f567eede0378c201f6f3f76c731672b4" %}  # [win and arm64]
 #{% set libnvptxcompiler_sha256 = "2eb267e6ebbe17e5ebc593bae8b83fa927c3e53cbf43ef5c614eff6c94053d10" %}  # [aarch64 and arm_variant_type == "tegra"]
 
 package:
@@ -73,8 +81,15 @@ requirements:
 
 outputs:
   - name: cuda-nvcc-tools
-    files:   # [linux]
-      - bin/*                               # [linux]
+    build:
+      missing_dso_whitelist:                            # [win]
+        - "*/api-ms-win-core-winrt-*.dll"               # [win]
+    files:
+      - bin/*                              # [linux]
+      # These are executables for the machine that runs the compiler, so they
+      # cannot live in the noarch: generic cuda-nvcc-dev_<target> output.
+      - Library\bin\*.exe                  # [win]
+      - Library\bin\nvcc.profile           # [win]
     requirements:
       build:
         - {{ compiler("c") }}
@@ -102,12 +117,15 @@ outputs:
         - test -f $PREFIX/bin/nvcc                                # [linux]
         - test -f $PREFIX/bin/ptxas                               # [linux]
         - bash test-rpath-nvcc.sh                                 # [linux]
+        - if not exist %LIBRARY_BIN%\nvcc.exe exit 1              # [win]
+        - if not exist %LIBRARY_BIN%\ptxas.exe exit 1             # [win]
+        - if not exist %LIBRARY_BIN%\nvcc.profile exit 1          # [win]
     about:
       home: https://developer.nvidia.com/cuda-toolkit
       license_file: nvcc/LICENSE
       license: LicenseRef-NVIDIA-End-User-License-Agreement
       license_url: https://docs.nvidia.com/cuda/eula/index.html
-      summary: Architecture independent part of CUDA NVCC compiler.
+      summary: Host architecture-specific CUDA NVCC compiler tools.
       license_family: Other
       description: |
         Compiler for CUDA applications.
@@ -117,17 +135,15 @@ outputs:
   - name: cuda-nvcc-dev_{{ target_platform }}
     build:
       noarch: generic
-      missing_dso_whitelist:   # [win]
-        - "*/api-ms-win-core-winrt-*.dll"        # [win]
     run_exports:
       strong:
         - cuda-version >={{ cuda_version }},<{{ cuda_version_next_major }}
     files:
       - targets/{{ target_name }}/bin/nvcc                          # [linux]
       - targets/{{ target_name }}/include/fatbinary_section.h       # [linux]
-      - Library\bin\*.exe                     # [win]
-      - Library\bin\nvcc.profile              # [win]
-      - Library\include\fatbinary_section.h   # [win]
+      # Windows: host-arch executables (Library\bin\*.exe) and nvcc.profile moved
+      # to cuda-nvcc-tools; only the arch-neutral header stays here.
+      - Library\include\fatbinary_section.h                         # [win]
     requirements:
       build:
         - {{ stdlib("c") }}
@@ -150,12 +166,12 @@ outputs:
         - libgcc-ng {{ gcc_min_constraint }}  # [linux]
       run_constrained:
         - gcc_impl_{{ target_platform }} {{ gcc_constraint }}  # [linux]
+        - cuda-nvcc-dev_{{ other_win_target }} <0a0            # [win]
     test:
       commands:
-        - test -L $PREFIX/targets/{{ target_name }}/bin/nvcc      # [linux]
+        - test -L $PREFIX/targets/{{ target_name }}/bin/nvcc                        # [linux]
         - test -f $PREFIX/targets/{{ target_name }}/include/fatbinary_section.h       # [linux]
-        - if not exist %LIBRARY_BIN%\nvcc.exe exit 1                  # [win]
-        - if not exist %LIBRARY_BIN%\nvcc.profile exit 1              # [win]
+        - if not exist %LIBRARY_INC%\fatbinary_section.h exit 1                      # [win]
     about:
       home: https://developer.nvidia.com/cuda-toolkit
       license_file: nvcc/LICENSE
@@ -211,6 +227,8 @@ outputs:
       run:
         - {{ pin_compatible("cuda-version", max_pin="x.x") }}
         - arm-variant * {{ arm_variant_type }}    # [aarch64]
+      run_constrained:
+        - libnvptxcompiler-dev_{{ other_win_target }} <0a0  # [win]
     test:
       commands:
         - test -f $PREFIX/targets/{{ target_name }}/lib/libnvptxcompiler_static.a     # [linux]
@@ -258,17 +276,8 @@ outputs:
         - {{ compiler("c") }}
         - {{ compiler("cxx") }}
         - {{ stdlib("c") }}
-        # The following three compiler dependencies are kept for conda-forge compatibility.
-        #   * With an activation script setting NVCC_CCBIN envrionment variable to $CC,
-        #    it is possible to remove the 'gxx' and 'gcc' dependencies from test requirements.
-        #    However, the conda package 'cuda-nvcc' already sets NVCC_CCBIN envrionment variable to $CC,
-        #    using '-ccbin=$CC' on the NVCC_PREPEND_FLAGS envrionment variable via an activation script.
-        #    Please refer to the activation script on the 'cuda-nvcc-feedstock' for more details.
-        #  * The Windows compiler dependency resolves to the same version as the aggregate's cbc.yaml file defines.
-        #    Therefore, it is kept commented out.
         - gxx              # [linux]
         - gcc              # [linux]
-        #- vs{{ VSYEAR }}_win-64 =={{ CL_VERSION }}  # [win]
         - cmake
         - cuda-driver-dev  # [linux]
         - git              # [linux]
@@ -341,6 +350,8 @@ outputs:
       run:
         - {{ pin_compatible("cuda-version", max_pin="x.x") }}
         - arm-variant * {{ arm_variant_type }}    # [aarch64]
+      run_constrained:
+        - cuda-crt-dev_{{ other_win_target }} <0a0  # [win]
     test:
       commands:
         - test -f $PREFIX/targets/{{ target_name }}/include/crt/common_functions.h  # [linux]
@@ -361,7 +372,7 @@ outputs:
     files:
       - nvvm/bin                # [linux]
       - nvvm/libdevice          # [linux]
-      - Library\nvvm\bin        # [win]  # cicc.exe exists under bin\ while .dll exist under bin\x64
+      - Library\nvvm\bin        # [win]  # platform-specific cicc.exe and NVVM runtime DLL
       - Library\nvvm\libdevice  # [win]
     requirements:
       build:
@@ -398,17 +409,25 @@ outputs:
   - name: cuda-nvvm-dev_{{ target_platform }}
     build:
       noarch: generic
-    files:   # [linux]
-      - targets/{{ target_name }}/nvvm  # [linux]
+    files:
+      - targets/{{ target_name }}/nvvm               # [linux]
+      # Cross-target headers and import libraries must be installable alongside
+      # host-native tools, so keep them in the target-named noarch dev package.
+      - Library\nvvm\include                         # [win]
+      - Library\nvvm\lib\{{ target_name }}           # [win]
     requirements:
       host:
         - cuda-version {{ cuda_version }}
       run:
         - {{ pin_compatible("cuda-version", max_pin="x.x") }}
         - arm-variant * {{ arm_variant_type }}    # [aarch64]
+      run_constrained:
+        - cuda-nvvm-dev_{{ other_win_target }} <0a0  # [win]
     test:
       commands:
-        - test -L $PREFIX/targets/{{ target_name }}/nvvm          # [linux]
+        - test -L $PREFIX/targets/{{ target_name }}/nvvm                         # [linux]
+        - if not exist %LIBRARY_PREFIX%\nvvm\include\nvvm.h exit 1               # [win]
+        - if not exist %LIBRARY_PREFIX%\nvvm\lib\{{ target_name }}\nvvm.lib exit 1  # [win]
     about:
       home: https://developer.nvidia.com/cuda-toolkit
       license_file: nvvm/LICENSE
@@ -425,11 +444,11 @@ outputs:
     build:
       # libnvvm.so gets corrupted by patchelf. No need to relocate as it is already relocatable.
       binary_relocation: false
-    files:
-      - nvvm/include          # [linux]
-      - nvvm/lib64            # [linux]
-      - Library\nvvm\include  # [win]
-      - Library\nvvm\lib\{{ target_name }}      # [win]
+    # The Windows output intentionally remains an empty compatibility package;
+    # target headers/import libraries live in cuda-nvvm-dev_<target>.
+    files:            # [linux]
+      - nvvm/include  # [linux]
+      - nvvm/lib64    # [linux]
     requirements:
       build:
         - {{ compiler("c") }}
@@ -448,8 +467,6 @@ outputs:
         - test -d $PREFIX/nvvm/include  # [linux]
         - test -d $PREFIX/nvvm/lib64    # [linux]
         - bash test-rpath-nvvm.sh       # [linux]
-        - if not exist %LIBRARY_PREFIX%\nvvm\include exit 1  # [win]
-        - if not exist %LIBRARY_PREFIX%\nvvm\lib\{{ target_name }} exit 1      # [win]
     about:
       home: https://developer.nvidia.com/cuda-toolkit
       license_file: nvvm/LICENSE
@@ -475,6 +492,12 @@ about:
   dev_url: https://docs.nvidia.com/cuda/index.html
 
 extra:
+  skip-lints:
+    - deprecate_license_url
+    # missing_tests: output "cuda-nvvm-impl": No tests were found.
+    - missing_tests
+    # should_use_compilers: The recipe requires a compiler directly (/outputs/4/test/requires/4)
+    - should_use_compilers
   feedstock-name: cuda-nvcc-impl
   recipe-maintainers:
     - conda-forge/cuda
