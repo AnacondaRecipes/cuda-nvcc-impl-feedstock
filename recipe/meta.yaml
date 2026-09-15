@@ -276,14 +276,6 @@ outputs:
         - {{ compiler("c") }}
         - {{ compiler("cxx") }}
         - {{ stdlib("c") }}
-        # The following three compiler dependencies are kept for conda-forge compatibility.
-        #   * With an activation script setting NVCC_CCBIN envrionment variable to $CC,
-        #    it is possible to remove the 'gxx' and 'gcc' dependencies from test requirements.
-        #    However, the conda package 'cuda-nvcc' already sets NVCC_CCBIN envrionment variable to $CC,
-        #    using '-ccbin=$CC' on the NVCC_PREPEND_FLAGS envrionment variable via an activation script.
-        #    Please refer to the activation script on the 'cuda-nvcc-feedstock' for more details.
-        #  * The Windows compiler dependency resolves to the same version as the aggregate's cbc.yaml file defines.
-        #    Therefore, it is kept commented out.
         - gxx              # [linux]
         - gcc              # [linux]
         - cmake
@@ -500,6 +492,12 @@ about:
   dev_url: https://docs.nvidia.com/cuda/index.html
 
 extra:
+  skip-lints:
+    - deprecate_license_url
+    # missing_tests: output "cuda-nvvm-impl": No tests were found.
+    - missing_tests
+    # should_use_compilers: The recipe requires a compiler directly (/outputs/4/test/requires/4)
+    - should_use_compilers
   feedstock-name: cuda-nvcc-impl
   recipe-maintainers:
     - conda-forge/cuda
