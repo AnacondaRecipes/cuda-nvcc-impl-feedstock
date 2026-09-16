@@ -70,7 +70,7 @@ source:
     sha256: {{ libnvptxcompiler_sha256 }}
 
 build:
-  number: 0
+  number: 1
   binary_relocation: false
   skip: true  # [osx]
 
