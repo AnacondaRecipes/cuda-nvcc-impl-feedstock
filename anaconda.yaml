@@ -26,3 +26,28 @@ upstream_sources:
       - libnvptxcompiler-dev_linux-aarch64
       - libnvptxcompiler-dev_win-64
       - libnvptxcompiler-dev_win-arm64
+  - webpage:
+      url: https://api.anaconda.org/package/conda-forge/cuda-nvcc-impl
+      regex: '"version":\s*"(13\.2(?:\.\d+)*)"'
+    feedstock_branch: '13.2'
+    version_matchspec: '>=13.2,<13.3'
+    supported: true
+    packages:
+      - cuda-crt-dev_linux-64
+      - cuda-crt-dev_linux-aarch64
+      - cuda-crt-dev_win-64
+      - cuda-crt-tools
+      - cuda-nvcc-dev_linux-64
+      - cuda-nvcc-dev_linux-aarch64
+      - cuda-nvcc-dev_win-64
+      - cuda-nvcc-impl
+      - cuda-nvcc-tools
+      - cuda-nvvm-dev_linux-64
+      - cuda-nvvm-dev_linux-aarch64
+      - cuda-nvvm-dev_win-64
+      - cuda-nvvm-impl
+      - cuda-nvvm-tools
+      - libnvptxcompiler-dev
+      - libnvptxcompiler-dev_linux-64
+      - libnvptxcompiler-dev_linux-aarch64
+      - libnvptxcompiler-dev_win-64
